@@ -1,3 +1,4 @@
+import math
 import collections
 import operator
 import sys
@@ -5,58 +6,76 @@ import random
 from statistics import median
 
 
+def distance(point1,point2):
+
+    if len(point1) == len(point2):
+        tempDistanceAxes = []
+        squaresSum = 0
+
+        for x in range(len(point1)):
+            tempDistanceAxes.append(point1[x]-point2[x])
+
+        for item in tempDistanceAxes:
+            squaresSum+=item*item
+
+        return math.sqrt(squaresSum)
+
+    else:
+
+        print("Points",point1,point2,"of unequal length")
+        
+def closestNeighbor(pointsData, newPoint):
+    closestPoint = None
+    minDistance = None
+
+    for point in pointsData:
+        currentDistance = distance(newPoint, point)
+
+        if minDistance == None or currentDistance < minDistance:
+            minDistance = currentDistance
+            closestPoint = point
+
+    print(closestPoint)
+    print(minDistance)
 
 
-def kdTree(points):
 
-    #check length of points
+preset = 2
 
-    length = len(points[0])
-    print('Building KD Tree with point length',length)
 
-    for element in points:
-        if len(element) != length:
+def checkLength(pointsData):
+    individualLength = len(pointsData[0])
+    print('Building KD Tree with point length',individualLength)
+
+    for element in pointsData:
+        if len(element) != individualLength:
             print('Points of unequal length')
             sys.exit()
     
     print('All points are of equal length')
 
 
-    dimList = []
-    for lengthPoint in range(length):
-        dimList.append(lengthPoint)
+def kdTree(pointsData, depth=0):
 
-    treeVisualizationDict = {0:[points]}
+    length_ = len(pointsData)
 
-    depth = 1
-        
-    for i in range(depth):
+    if length_ <= 0:
+        return None
+    
+    axis = depth % preset
 
-        currentDimension = random.choice(dimList)
+    sortedPoints = sorted(pointsData, key=lambda point: point[axis])
 
-        tempList = []
-        for element in points:
-            tempList.append(element[currentDimension])
 
-        tempListL = []
-        tempListR = []
-
-        for item in range(len(tempList)):
-            if item>median(tempList):
-                tempListR.append(points[item])
-            else:
-                tempListL.append(points[item])
-
-        #print(tempListL)
-        #print(tempListR)
-        #print(len(tempListL),len(tempListR))
-        treeVisualizationDict[i+1] = [tempListL,tempListR]
-
-    print(treeVisualizationDict)
-
+    tempLength = int(length_/2)
+    return {
+        'point': sortedPoints[tempLength],
+        'left': kdTree(sortedPoints[:tempLength], depth+1),
+        'right' : kdTree(sortedPoints[tempLength +1:], depth+1)
+    }   
     
 
 
-testData = [(2,4,3,7),(3,3,5,4),(2,4,3,2),(5,12,3,9),(7,37,3,2),(24,21,42,1),(23,24,1,5),(42,4,4,1),(3,5,2,4),(72,3,3,89)]
 
-kdTree(testData)
+testData = [(2,4,3,7),(3,3,5,4),(3,3,5,4),(2,4,3,2),(5,12,3,9),(7,37,3,2),(24,21,42,1),(23,24,1,5),(42,4,4,1),(3,5,2,4),(72,3,3,89)]
+print(kdTree(testData))
