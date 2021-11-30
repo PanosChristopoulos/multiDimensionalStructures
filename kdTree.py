@@ -40,12 +40,12 @@ def closestNeighbor(pointsData, newPoint):
 
 
 
-preset = 2
+preset =  3
 
 
 def checkLength(pointsData):
     individualLength = len(pointsData[0])
-    print('Building KD Tree with point length',individualLength)
+    
 
     for element in pointsData:
         if len(element) != individualLength:
@@ -53,6 +53,7 @@ def checkLength(pointsData):
             sys.exit()
     
     print('All points are of equal length')
+    print('Building KD Tree with point length',individualLength)
 
 
 def kdTree(pointsData, depth=0):
@@ -69,13 +70,15 @@ def kdTree(pointsData, depth=0):
 
     tempLength = int(length_/2)
     return {
+        'depth' : depth+1,
         'point': sortedPoints[tempLength],
-        'left': kdTree(sortedPoints[:tempLength], depth+1),
-        'right' : kdTree(sortedPoints[tempLength +1:], depth+1)
+        'left_tree': kdTree(sortedPoints[:tempLength], depth+1),
+        'right_tree' : kdTree(sortedPoints[tempLength +1:], depth+1)
     }   
     
 
 
 
 testData = [(2,4,3,7),(3,3,5,4),(3,3,5,4),(2,4,3,2),(5,12,3,9),(7,37,3,2),(24,21,42,1),(23,24,1,5),(42,4,4,1),(3,5,2,4),(72,3,3,89)]
+checkLength(testData)
 print(kdTree(testData))
