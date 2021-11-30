@@ -38,7 +38,20 @@ def closestNeighbor(pointsData, newPoint):
     print(closestPoint)
     print(minDistance)
 
+def minDistance(point,point1,point2):
+    if point1 is None:
+        return point2
 
+    if point2 is None:
+        return point1
+
+    distance1 = distance(point,point1)
+    distance2 = distance(point,point2)
+
+    if distance1 < distance2:
+        return point1
+    else:
+        return point2
 
 preset =  3
 
@@ -76,9 +89,35 @@ def kdTree(pointsData, depth=0):
         'right_tree' : kdTree(sortedPoints[tempLength +1:], depth+1)
     }   
     
+def kdTreeClosest(root, point, depth=0):
+    if root is None:
+        return None
+
+    axis = depth % preset
+
+    nextBranch = None
+    oppositeBranch = None
+
+    if point[axis] < root['point'][axis]:
+        nextBranch = root['left_tree']
+        oppositeBranch = root['right_tree']
+    else:
+        nextBranch = root['right_tree']
+        oppositeBranch = root['left_tree']
+
+    try:
+        bestSolution = minDistance(point,kdTreeClosest(nextBranch,point,depth+1),root['point'])
+    except:
+        bestSolution = minDistance(point,kdTreeClosest(oppositeBranch,point,depth+1),root['point'])
+
+
+    return bestSolution
+    
 
 
 
 testData = [(2,4,3,7),(3,3,5,4),(3,3,5,4),(2,4,3,2),(5,12,3,9),(7,37,3,2),(24,21,42,1),(23,24,1,5),(42,4,4,1),(3,5,2,4),(72,3,3,89)]
 checkLength(testData)
-print(kdTree(testData))
+treeSample = kdTree(testData)
+
+print(kdTreeClosest(treeSample,(3,1,5,4)))
