@@ -5,7 +5,6 @@ import sys
 import random
 from statistics import median
 
-
 def distance(point1,point2):
 
     if len(point1) == len(point2):
@@ -65,8 +64,7 @@ def checkLength(pointsData):
             print('Points of unequal length')
             sys.exit()
     
-    print('All points are of equal length')
-    print('Building KD Tree with point length',individualLength)
+    print('Building KD Tree with point length:',individualLength)
 
 
 def kdTree(pointsData, depth=0):
@@ -117,7 +115,13 @@ def kdTreeClosest(root, point, depth=0):
 
 
 testData = [(2,4,3,7),(3,3,5,4),(3,3,5,4),(2,4,3,2),(5,12,3,9),(7,37,3,2),(24,21,42,1),(23,24,1,5),(42,4,4,1),(3,5,2,4),(72,3,3,89)]
-checkLength(testData)
-treeSample = kdTree(testData)
+data = []
 
-print(kdTreeClosest(treeSample,(3,1,5,4)))
+for x in range(1200):
+    tempList = []
+    for y in range(4):
+        tempList.append(random.randint(1, 100))
+    data.append(tempList)
+checkLength(data)
+treeSample = kdTree(data)
+print(treeSample)
