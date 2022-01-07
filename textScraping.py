@@ -38,5 +38,3 @@ for url in urlList:
         print(data.get_text()) 
     """
     article = soup.find("div", {"id":"bodyContent"}).findAll('p')
-    print(article)
-    print(article)
