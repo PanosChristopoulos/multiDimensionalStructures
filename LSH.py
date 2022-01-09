@@ -6,7 +6,10 @@ from sklearn.metrics.pairwise import cosine_similarity,cosine_distances
 from numpy import dot
 from numpy.linalg import norm
 from scipy import spatial
+<<<<<<< HEAD
 from importArticles import articlesDataframe
+=======
+>>>>>>> aek
 
 #Data 
 a = "flying fish flew by the space station"
@@ -29,6 +32,7 @@ def shingle(text:str, k:int):
 
     return set(shingle_set)
 
+<<<<<<< HEAD
 #Create shingle set and vocabulary list for all text data
 vocab = []
 final_vocab=[]
@@ -47,6 +51,14 @@ for i in range(len(articlesDataframe)):
         pass
 
 vocab = list(set(vocab))#Make unique 3 characters in vocab 
+=======
+#Call function shingle
+k =2
+a = shingle(a,k)#print(a)
+b = shingle(b,k)#print(b)
+c = shingle(c,k)#print(c)
+#Call function shingle
+>>>>>>> aek
 
 #One encoding
 
@@ -93,8 +105,20 @@ def createHash(vector:list):
                 break
 
     return signature
+<<<<<<< HEAD
 
 shingleSignature = createHash(shingleOne)# Create Signature
+=======
+
+# Create Signatures
+aSig = createHash(a1)
+bSig = createHash(b1)
+cSig = createHash(c1)
+
+print(aSig)
+#print(bSig)
+#print(cSig)
+>>>>>>> aek
 
 print(shingleSignature)#List
 
@@ -113,6 +137,7 @@ def split_vec(signature,b):
     for i in range (0,len(signature),r):
         subVectors.append(signature[i:i+r])
     return subVectors
+<<<<<<< HEAD
 
 bandShingle = split_vec(shingleSignature,50)#Call function split_vec
 
@@ -121,6 +146,13 @@ print(bandShingle) #List of Lists
 '''
 for aRows ,bRows in bandShingle:
     
+=======
+band_a = split_vec(aSig,10)
+band_b = split_vec(bSig,10)
+band_c = split_vec(cSig,10)
+print(band_b)
+for aRows ,bRows in zip(band_a,band_b):
+>>>>>>> aek
     if aRows == bRows :
         #print (f"Pair:{aRows} = {bRows}")
         #print('a=b')
@@ -143,10 +175,21 @@ for bRows ,cRows in bandShingle:
         break
 '''
 
+<<<<<<< HEAD
 
 '''
 COSINE SIMILARITY FOR NEXT 
 for aRows, bRows , cRows in bandShingle:
+=======
+data = pd.read_csv(io.StringIO(text),sep='\t')
+data.head() 
+    '''
+<<<<<<< Updated upstream
+
+ 
+=======
+for aRows, bRows , cRows in zip(band_a,band_b,band_c):
+>>>>>>> aek
     #aArr = np.asarray(aRows)
     #cArr = np.asarray(cRows) 
     aRows == aRows
@@ -156,4 +199,12 @@ for aRows, bRows , cRows in bandShingle:
 resultAB = 1 - spatial.distance.cosine(aRows,bRows)
 resultAC = 1 - spatial.distance.cosine(aRows,cRows) #resultAC = cosine_similarity(aArr.reshape(1,-1),cArr.reshape(1,-1))
 resultBC = 1 - spatial.distance.cosine(bRows,cRows)
+<<<<<<< HEAD
 '''  
+=======
+
+print(resultAB)
+print(resultAC)
+print(resultBC)
+>>>>>>> Stashed changes
+>>>>>>> aek
