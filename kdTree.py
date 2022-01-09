@@ -122,6 +122,8 @@ for x in range(1200):
     for y in range(4):
         tempList.append(random.randint(1, 100))
     data.append(tempList)
+
+    
 checkLength(data)
 treeSample = kdTree(data)
 print(treeSample)
