@@ -9,9 +9,9 @@ from scipy import spatial
 from importArticles import articlesDataframe
 
 #Data 
-#a = "flying fish flew by the space station"
-#b = "he will not allow you to bring your sticks of dynamite and pet armadillo "
-#c = "he figured a few sticks of dynamite were easier than a fishing pot"
+a = "flying fish flew by the space station"
+b = "he will not allow you to bring your sticks of dynamite and pet armadillo "
+c = "he figured a few sticks of dynamite were easier than a fishing pot"
 #Data
 
 
@@ -33,35 +33,25 @@ def shingle(text:str, k:int):
 vocab = []
 final_vocab=[]
 final_set = []
-shingleOne = []
-sum = 0
-for i in range(len(articlesDataframe)): 
+for i in range(len(articlesDataframe)):
+    
     try:
         #Make the shingle of our texts
-        shingle_title = list(shingle(articlesDataframe['title'][i],3)) #Call function shingle
-        final_set.append(shingle_title)
-        
+        shingle_title = shingle(articlesDataframe['title'][i],3) #Call function shingle
+        final_set.extend(shingle_title)
         #Make the shingle of our texts
         
-        vocab.extend(shingle_title)#Make the vocabulary of our texts
-        sum += len(shingle_title)
-        shingleOne = [1 if x in shingle_title else 0 for i in range(len(shingle_title)) for x in vocab]#Encoding
-    
+        vocab.extend(list(shingle_title))#Make the vocabulary of our texts
+
     except KeyError:
         pass
 
 vocab = list(set(vocab))#Make unique 3 characters in vocab 
 
-print(shingleOne)
-#print(sum)
-#print(shingle_title)
-#print(final_set)
-#print(len(final_set))
-#print(vocab)
-#print(final_set)
-
-
 #One encoding
+
+shingleOne = [1 if x in final_set else 0 for x in vocab]
+
 #One encoding
 
 
@@ -85,33 +75,30 @@ def minHash(vocabSize: int, nbits:int):
 
 
 minhash = minHash(len(vocab), 100)#creation of 100 minhash vecs
-#print(minhash)
+
 def createHash(vector:list):
     '''
-    use this func to create our signatures
+    use this func for creating our signatures
     '''
     signature = []
 
     for func in minhash:
 
         for i in range(1, len(vocab)+1):
-            
             idx = func.index(i)
             sign_value = vector[idx]
 
             if sign_value == 1:
                 signature.append(idx)
-            else:
-                pass
+                break
 
     return signature
 
-shingleSignature = list(createHash(shingleOne))# Create Signature
+shingleSignature = createHash(shingleOne)# Create Signature
 
 #print(shingleSignature)#List
 
-'''
-#Signature info
+'''#Signature info
 def signatureInfo(x,y):
     return len(x.intersection(y)) / len(x.union(y)) 
 
@@ -127,7 +114,7 @@ def split_vec(signature,b):
         subVectors.append(signature[i:i+r])
     return subVectors
 
-bandShingle = split_vec(shingleSignature,50)#Call function split_vec
+bandShingle = split_vec(shingleSignature,10)#Call function split_vec
 
 print(bandShingle) #List of Lists
 
