@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import random
+import statistics
 
 from numpy.lib.function_base import median
 
@@ -34,7 +35,6 @@ class rangeTree:
         else:
             dataList = subtree
 
-        print(dataList)
 
         if len(dataList) <= 2:
 
@@ -53,27 +53,107 @@ class rangeTree:
             currentCoordinate = 0
         else:
             currentCoordinate = 1
+            
+        coordinates = not coordinates
 
-        nodeToDivide = dataList[0]
+        dataToDivide = []
+
+        for item in dataList:
+            dataToDivide.append(item[currentCoordinate])
         
+        medianNum = statistics.median(dataToDivide)
+
+                
 
         for subtree in dataList:
-            pass
+            if subtree[currentCoordinate] < medianNum:
+                leftSubtree.append(subtree)
+            else:
+                rightSubtree.append(subtree)
+
+                    
+
+        for subtree in [leftSubtree,rightSubtree]:
+            depth = depth+1
+            treeVisualizationList.append(self.rangeTreeDivision(subtree,coordinates,depth))
+        
+        return treeVisualizationList
+
+
+    def findNearestNeighbors(self,point):
+
+        nearestNeighbors = []
+
+        initialData = self.initialData
+        treeData = self.initialData
+        treeData.append(point)
+
+        sampleTree__ = rangeTree(treeData)
+
+        treeData = sampleTree__.data
+            
+
+        treeQueryData = self.rangeTreeDivision(treeData)
+
+        for subtree in range(len(treeQueryData)):
+            try:
+                for x in treeQueryData[subtree]['subtree']:
+                    if x == treeData[-1]:
+
+                        for x in treeQueryData[subtree]['subtree']:
+                            if x != treeData[-1]:
+                                nearestNeighbors.append(x)
+                                
+                        for neighborCounter in range(3):
+
+                            if not nearestNeighbors:
+                                for x in treeQueryData[subtree-neighborCounter]['subtree']:
+                                    if x != treeData[-1]:
+                                        nearestNeighbors.append(x)
+
+
+                                for x in treeQueryData[subtree+neighborCounter]['subtree']:
+                                    if x != treeData[-1]:
+                                        nearestNeighbors.append(x)
+                                    
+                            if not nearestNeighbors:
+
+                                for x in treeQueryData[neighborCounter]['subtree']:
+                                    if x != treeData[-1]:
+                                        nearestNeighbors.append(x)
+
+                                                        
+            except:
+                pass
+                
+        nearestNeighborsList = []
+
+        for item in nearestNeighbors:
+            nearestNeighborsList.append(initialData[treeData.index(item)])
+
+        return nearestNeighborsList
 
 
 
 
-
-
-
+counter = 0
 
 data = []
 
-for x in range(10):
+for x in range(100):
     tempList = []
     for y in range(5):
         tempList.append(random.randint(1, 500))
     data.append(tempList)
 
+treeVisualizationList = []
 sampleTree = rangeTree(data)
-sampleTree.rangeTreeDivision(data)
+nearestNeighbors = sampleTree.findNearestNeighbors([400,105,105,435,125])
+        
+if bool(nearestNeighbors) == False:        
+    counter+=1
+else:
+    print(nearestNeighbors)
+    pass
+
+    

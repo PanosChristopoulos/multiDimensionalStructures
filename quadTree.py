@@ -111,6 +111,8 @@ class quadTree:
                                 for x in treeQueryData[subtree+neighborCounter]['subtree']:
                                     if x != treeData[-1]:
                                         nearestNeighbors.append(x)
+                            
+                            if not nearestNeighbors:
 
                                 for x in treeQueryData[neighborCounter]['subtree']:
                                     if x != treeData[-1]:
