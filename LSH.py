@@ -45,13 +45,28 @@ for i in range(len(articlesDataframe)):
         
         vocab.extend(shingle_title)#Make the vocabulary of our texts
         sum += len(shingle_title)
-        shingleOne = [1 if x in shingle_title else 0 for i in range(len(shingle_title)) for x in vocab]#Encoding
-    
+
+        #EncodingshingleOne = [1 if y in shingle_title else 0 for i in range(len(shingle_title)) for x in vocab]
+        
+        #print(tempList)
     except KeyError:
         pass
 
+
 vocab = list(set(vocab))#Make unique 3 characters in vocab 
 
+dataList = []
+for i in range(len(articlesDataframe)):
+    tempList = []
+    for item in vocab:
+        if item in shingle_title:
+            tempList.append(1)
+        else:
+            tempList.append(0)
+    dataList.append(tempList)
+
+print(len(dataList))
+print(dataList)
 print(shingleOne)
 #print(sum)
 #print(shingle_title)
