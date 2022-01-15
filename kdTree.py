@@ -126,4 +126,4 @@ for x in range(1200):
     
 checkLength(data)
 treeSample = kdTree(data)
-print(treeSample)
+treeSample.nearestNeighbor((3,3,5,7))
