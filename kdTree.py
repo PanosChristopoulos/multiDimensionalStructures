@@ -86,7 +86,9 @@ def kdTree(pointsData, depth=0):
         'left_tree': kdTree(sortedPoints[:tempLength], depth+1),
         'right_tree' : kdTree(sortedPoints[tempLength +1:], depth+1)
     }   
-    
+
+
+
 def kdTreeClosest(root, point, depth=0):
     if root is None:
         return None
@@ -112,7 +114,7 @@ def kdTreeClosest(root, point, depth=0):
     return bestSolution
     
 
-
+"""
 
 testData = [(2,4,3,7),(3,3,5,4),(3,3,5,4),(2,4,3,2),(5,12,3,9),(7,37,3,2),(24,21,42,1),(23,24,1,5),(42,4,4,1),(3,5,2,4),(72,3,3,89)]
 data = []
@@ -126,4 +128,5 @@ for x in range(1200):
     
 checkLength(data)
 treeSample = kdTree(data)
-treeSample.nearestNeighbor((3,3,5,7))
+print(kdTreeClosest(treeSample,(3,3,5,7)))
+"""
