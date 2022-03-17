@@ -4,6 +4,7 @@ import operator
 import sys
 import random
 from statistics import median
+sys.setrecursionlimit(10000)
 
 def distance(point1,point2):
 

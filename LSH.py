@@ -95,12 +95,13 @@ def lshSimilarity(text1,text2):
 
     band_a_jacc = [item for sublist in band_a for item in sublist]
     band_b_jacc = [item for sublist in band_b for item in sublist]
-    similarity = 1 - spatial.distance.cosine(band_a_jacc, band_b_jacc)
+    a_jacc = set(band_a_jacc)
+    b_jacc = set(band_b_jacc)
+    similarity = float(len(a_jacc.intersection(b_jacc))) / len(a_jacc.union(b_jacc))
 
     return similarity
 
 
-print(lshSimilarity('y) just to get the data in "Pythonic" order. It would be interesting to time the nuts-and-bolts implementation:','y) just to get the data in "Pythonic" order. It would be interesting to time the nuts-and-bolts implementation:'))
 
 
     

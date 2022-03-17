@@ -23,7 +23,7 @@ articlesDataframe = df[['source_name','author','title','description']]
 
 articlesDataframe.dropna(inplace=True)
 
-articlesDataframe = articlesDataframe.head(20)
+articlesDataframe = articlesDataframe.head(50)
 closedClassTags = ['CD', 'CC', 'DT', 'EX', 'IN', 'LS', "''", ',', '.', '``', 'MD', 'PDT', 'POS', 'PRP', 'PRP$', 'RP', 'TO', 'UH', 'WDT', 'WP', 'WP$', 'WRB']
 ps = PorterStemmer()
 

@@ -12,7 +12,7 @@ sys.setrecursionlimit(10000)
 QTREE_VARIABLE = 4
 
 
-
+treeVisualizationList = []
 class quadTree:
 
 
@@ -100,7 +100,7 @@ class quadTree:
                             if x != treeData[-1]:
                                 nearestNeighbors.append(x)
                         
-                        for neighborCounter in range(3):
+                        for neighborCounter in range(10):
 
                             if not nearestNeighbors:
                                 for x in treeQueryData[subtree-neighborCounter]['subtree']:
@@ -125,38 +125,9 @@ class quadTree:
         nearestNeighborsList = []
 
         for item in nearestNeighbors:
-            nearestNeighborsList.append(initialData[treeData.index(item)])
+            try:
+                nearestNeighborsList.append(initialData[treeData.index(item)])
+            except:
+                pass
 
         return nearestNeighborsList
-
-
-        
-
-
-            
-
-                
-counter = 0
-
-
-for x in range(120):
-    
-
-    data = []
-
-    for x in range(100):
-        tempList = []
-        for y in range(5):
-            tempList.append(random.randint(1, 500))
-        data.append(tempList)
-
-    treeVisualizationList = []
-    sampleTree = quadTree(data)
-    nearestNeighbors = sampleTree.findNearestNeighbors([400,105,105,435,125])
-        
-    if bool(nearestNeighbors) == False:        
-        counter+=1
-    else:
-        pass
-
-print(nearestNeighbors)

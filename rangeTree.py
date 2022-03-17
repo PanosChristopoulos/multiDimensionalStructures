@@ -2,8 +2,12 @@ import matplotlib.pyplot as plt
 import numpy as np
 import random
 import statistics
+import sys
 
 from numpy.lib.function_base import median
+sys.setrecursionlimit(10000)
+
+treeVisualizationList = []
 
 class rangeTree:
 
@@ -135,7 +139,7 @@ class rangeTree:
 
 
 
-
+"""
 counter = 0
 
 data = []
@@ -156,4 +160,4 @@ else:
     print(nearestNeighbors)
     pass
 
-    
+    """
