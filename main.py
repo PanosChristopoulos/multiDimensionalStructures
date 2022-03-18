@@ -8,7 +8,7 @@ from rangeTree import *
 from rTree import *
 
 sys.setrecursionlimit(10000)
-df = articlesDataframe
+df = articlesDataframeFinal
 
 trainDf, testDf = train_test_split(df, test_size=0.1)
 
@@ -19,38 +19,45 @@ time.sleep(0.5)
 
 print('----------------------------KD Tree Demo----------------------------')
 
-start_time = time.time()
+try:
+    start_time = time.time()
 
-col_one_list = trainDf['vectors'].tolist()
+    col_one_list = trainDf['vectors'].tolist()
 
-kdTreeDemo = kdTree(col_one_list)
+    kdTreeDemo = kdTree(col_one_list)
 
-timeElapsed = time.time() - start_time
+    timeElapsed = time.time() - start_time
 
-print(timeElapsed,"seconds elapsed to insert",len(trainDf),"train articles to KD Tree. Average insertion time:",(timeElapsed/len(trainDf)))
+    print(timeElapsed,"seconds elapsed to insert",len(trainDf),"train articles to KD Tree. Average insertion time:",(timeElapsed/len(trainDf)))
 
-rowToQuery = testDf.sample()
+    KdTreeInsertionTime = timeElapsed
 
-print('Randomly selected article:\n',rowToQuery.iloc[0]['description'])
+    rowToQuery = testDf.sample()
+
+    print('Randomly selected article:\n',rowToQuery.iloc[0]['description'])
 
 
-closestNeighbor = kdTreeClosest(kdTreeDemo,rowToQuery['vectors'].tolist()[0])
+    closestNeighbor = kdTreeClosest(kdTreeDemo,rowToQuery['vectors'].tolist()[0])
 
-print("The article's vector is",rowToQuery['vectors'].tolist()[0])
-print("Using KD Tree, its nearest neighbor is ",closestNeighbor)
+    print("The article's vector is",rowToQuery['vectors'].tolist()[0])
+    print("Using KD Tree, its nearest neighbor is ",closestNeighbor)
 
-tempList = trainDf['vectors'].tolist()
+    tempList = trainDf['vectors'].tolist()
 
-for item in range(len(tempList)):
-    if tempList[item] == closestNeighbor:
-        itemToPick = item
+    for item in range(len(tempList)):
+        if tempList[item] == closestNeighbor:
+            itemToPick = item
 
-matchedText = trainDf.iloc[itemToPick]['description']
+    matchedText = trainDf.iloc[itemToPick]['description']
 
-print('Closest neighbor to use for category classification, according to KD Tree, is:')
-print(matchedText)
-print('LSH Similartiy:',lshSimilarity(rowToQuery.iloc[0]['description'],matchedText))
+    print('Closest neighbor to use for category classification, according to KD Tree, is:')
+    print(matchedText)
 
+    KdtreeLSH = lshSimilarity(rowToQuery.iloc[0]['description'],matchedText)
+
+    print('LSH Similartiy:',KdtreeLSH)
+except:
+    pass
 time.sleep(0.5)
 
 print('----------------------------KD Tree Demo End----------------------------')
@@ -68,6 +75,8 @@ try:
     timeElapsed = time.time() - start_time
 
     print(timeElapsed,"seconds elapsed to insert",len(trainDf),"train articles to KD Tree. Average insertion time:",(timeElapsed/len(trainDf)))
+
+    quadTreeInsertionTime = timeElapsed
 
     rowToQuery = testDf.sample()
 
@@ -92,6 +101,8 @@ try:
         matchedText = trainDf.iloc[item]['description']
         print(matchedText)
         print('LSH Similartiy:',lshSimilarity(rowToQuery.iloc[0]['description'],matchedText))
+    
+    quadTreeSimilarity  = lshSimilarity(rowToQuery.iloc[0]['description'],matchedText)
 except:
     pass
 
@@ -100,76 +111,106 @@ print('----------------------------Quad Tree Demo End---------------------------
 input("Press Enter for Range Tree Demo...")
 
 print('----------------------------Range Tree Demo----------------------------')
+try:
+    start_time = time.time()
 
-start_time = time.time()
+    col_one_list = trainDf['vectors'].tolist()
 
-col_one_list = trainDf['vectors'].tolist()
+    rangeTreeDemo = rangeTree(col_one_list)
 
-rangeTreeDemo = rangeTree(col_one_list)
+    timeElapsed = time.time() - start_time
 
-timeElapsed = time.time() - start_time
+    print(timeElapsed,"seconds elapsed to insert",len(trainDf),"train articles to KD Tree. Average insertion time:",(timeElapsed/len(trainDf)))
 
-print(timeElapsed,"seconds elapsed to insert",len(trainDf),"train articles to KD Tree. Average insertion time:",(timeElapsed/len(trainDf)))
+    rangeTreeTime = timeElapsed
 
-rowToQuery = testDf.sample()
+    rowToQuery = testDf.sample()
 
-print('Randomly selected article:\n',rowToQuery.iloc[0]['description'])
-nearestNeighbors = rangeTreeDemo.findNearestNeighbors(rowToQuery['vectors'].tolist()[0])
+    print('Randomly selected article:\n',rowToQuery.iloc[0]['description'])
+    nearestNeighbors = rangeTreeDemo.findNearestNeighbors(rowToQuery['vectors'].tolist()[0])
 
-print("The article's vector is",rowToQuery['vectors'].tolist()[0])
-print("Using Range Tree, its nearest neighbor list is:",nearestNeighbors)
+    print("The article's vector is",rowToQuery['vectors'].tolist()[0])
+    print("Using Range Tree, its nearest neighbor list is:",nearestNeighbors)
 
-tempList = trainDf['vectors'].tolist()
+    tempList = trainDf['vectors'].tolist()
 
-newsIndexes = []
+    newsIndexes = []
 
-for item in nearestNeighbors:
-    for item_ in range(len(tempList)):
-        if tempList[item_] == item:
-            newsIndexes.append(item_)
+    for item in nearestNeighbors:
+        for item_ in range(len(tempList)):
+            if tempList[item_] == item:
+                newsIndexes.append(item_)
 
-print('Closest neighbors to use for category classification, according to Range Tree, are:')
+    print('Closest neighbors to use for category classification, according to Range Tree, are:')
 
-for item in newsIndexes:
-    matchedText = trainDf.iloc[item]['description']
-    print(matchedText)
-    print('LSH Similartiy:',lshSimilarity(rowToQuery.iloc[0]['description'],matchedText))
-
+    for item in newsIndexes:
+        matchedText = trainDf.iloc[item]['description']
+        print(matchedText)
+        print('LSH Similartiy:',lshSimilarity(rowToQuery.iloc[0]['description'],matchedText))
+    
+    rangeTreeSimilarity = lshSimilarity(rowToQuery.iloc[0]['description'],matchedText)
+except:
+    pass
 input("Press Enter for R Tree Demo...")
 
 print('----------------------------R Tree Demo----------------------------')
+try:
+    start_time = time.time()
 
-start_time = time.time()
+    col_one_list = trainDf['vectors'].tolist()
 
-col_one_list = trainDf['vectors'].tolist()
+    rTreeDemo = rTree(col_one_list)
 
-rTreeDemo = rTree(col_one_list)
+    timeElapsed = time.time() - start_time
 
-timeElapsed = time.time() - start_time
+    print(timeElapsed,"seconds elapsed to insert",len(trainDf),"train articles to KD Tree. Average insertion time:",(timeElapsed/len(trainDf)))
 
-print(timeElapsed,"seconds elapsed to insert",len(trainDf),"train articles to KD Tree. Average insertion time:",(timeElapsed/len(trainDf)))
+    rTreeInsertionTime = timeElapsed
+    rowToQuery = testDf.sample()
 
-rowToQuery = testDf.sample()
+    print('Randomly selected article:\n',rowToQuery.iloc[0]['description'])
+    nearestNeighbors = rTreeDemo.findNearestNeighbors(rowToQuery['vectors'].tolist()[0])
+    print("The article's vector is",rowToQuery['vectors'].tolist()[0])
+    print("Using R Tree, its nearest neighbor list is:",nearestNeighbors)
 
-print('Randomly selected article:\n',rowToQuery.iloc[0]['description'])
-nearestNeighbors = rTreeDemo.findNearestNeighbors(rowToQuery['vectors'].tolist()[0])
-print("The article's vector is",rowToQuery['vectors'].tolist()[0])
-print("Using R Tree, its nearest neighbor list is:",nearestNeighbors)
+    tempList = trainDf['vectors'].tolist()
 
-tempList = trainDf['vectors'].tolist()
+    newsIndexes = []
 
-newsIndexes = []
+    for item in nearestNeighbors:
+        for item_ in range(len(tempList)):
+            if tempList[item_] == item:
+                newsIndexes.append(item_)
 
-for item in nearestNeighbors:
-    for item_ in range(len(tempList)):
-        if tempList[item_] == item:
-            newsIndexes.append(item_)
+    print('Closest neighbors to use for category classification, according to Quad Tree, are:')
 
-print('Closest neighbors to use for category classification, according to Quad Tree, are:')
+    for item in newsIndexes:
+        matchedText = trainDf.iloc[item]['description']
+        print(matchedText)
+        print('LSH Similartiy:',lshSimilarity(rowToQuery.iloc[0]['description'],matchedText))
+    
+    rTreeSimilarity = lshSimilarity(rowToQuery.iloc[0]['description'],matchedText)
+except:
+    pass
 
-for item in newsIndexes:
-    matchedText = trainDf.iloc[item]['description']
-    print(matchedText)
-    print('LSH Similartiy:',lshSimilarity(rowToQuery.iloc[0]['description'],matchedText))
+names = ['KD Tree', 'Quad Tree', 'Range Tree','R Tree']
 
+timesList = [KdTreeInsertionTime,quadTreeInsertionTime,rangeTreeTime,rTreeInsertionTime]
+LSHList = [KdtreeLSH,quadTreeSimilarity,rangeTreeSimilarity,rTreeSimilarity]
 
+plt.show()
+plt.figure(figsize=(9, 3))
+
+plt.subplot(131)
+plt.bar(names, timesList)
+plt.suptitle('Total Insert Time in every Tree')
+
+plt.show()
+
+plt.figure(figsize=(9, 3))
+
+plt.subplot(131)
+plt.bar(names, LSHList)
+plt.suptitle('Average Similarity for every Tree')
+
+plt.show()

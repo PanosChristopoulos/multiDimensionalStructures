@@ -19,6 +19,7 @@ class rangeTree:
         min = np.min(self.initialData, axis=1).tolist()
 
         plt.scatter(max, min, marker='x')
+        plt.suptitle('Data Visualization')
         #plt.show()
 
         dataList = []

@@ -15,7 +15,7 @@ from collections import Counter
 from nltk.stem import PorterStemmer 
 import traceback
 from progress.bar import FillingSquaresBar
-
+import numpy as np
 
 df = pd.read_csv('articles_data.csv')
 
@@ -23,7 +23,7 @@ articlesDataframe = df[['source_name','author','title','description']]
 
 articlesDataframe.dropna(inplace=True)
 
-articlesDataframe = articlesDataframe.head(50)
+articlesDataframe = articlesDataframe.head(2000)
 closedClassTags = ['CD', 'CC', 'DT', 'EX', 'IN', 'LS', "''", ',', '.', '``', 'MD', 'PDT', 'POS', 'PRP', 'PRP$', 'RP', 'TO', 'UH', 'WDT', 'WP', 'WP$', 'WRB']
 ps = PorterStemmer()
 
@@ -150,7 +150,7 @@ for x in articlesDataframe['description']:
     tfIdfForArticle = computeTFIDF(x,eris)
 
     for key,value in tfIdfForArticle.items():
-        vectorList.append(int(tokensList.index(key)*value*10))
+        vectorList.append(int(tokensList.index(key)*value*1000))
     try:
         vectorsColumn.append(vectorList[:10])
     except:
@@ -158,10 +158,52 @@ for x in articlesDataframe['description']:
 
     bar2.next()
 
-print('')
-    
+
 articlesDataframe['vectors'] = vectorsColumn
 
-articlesDataframe = articlesDataframe.drop(articlesDataframe[articlesDataframe.vectors.map(len) < 10].index)
+output = []
+falseNegative = []
+
+for x in range(len(vectorsColumn)):
+    if vectorsColumn[x] not in output:
+        output.append(vectorsColumn[x])
+    else:
+        falseNegative.append(x)
+
+
+
+    
+
+"""
+
+
+def try_join(l):
+
+    try:
+        return ','.join(map(str, l))
+    except TypeError:
+        return np.nan
+
+articlesDataframe['liststring'] = [try_join(l) for l in articlesDataframe['vectors']]
+
+print(articlesDataframe)
+
+articlesDataframe.drop_duplicates(subset=['liststring'])
+
+
+
+
+
+articlesDataframe = articlesDataframe.truncate(before=0, after=len(vectorsColumn)-len(falseNegative)-2)
+
+print(len(falseNegative))
+"""
+articlesDataframe = articlesDataframe.reset_index()
+
+articlesDataframe.drop(falseNegative, inplace=True)
+
+
+
+articlesDataframeFinal = articlesDataframe.drop(articlesDataframe[articlesDataframe.vectors.map(len) < 10].index)
 
 

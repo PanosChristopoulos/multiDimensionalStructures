@@ -23,6 +23,7 @@ class rTree:
         min = np.min(self.initialData, axis=1).tolist()
 
         plt.scatter(max, min, marker='x')
+        plt.suptitle('Data Visualization')
         #plt.show()
 
         dataList = []
@@ -137,22 +138,3 @@ class rTree:
                 pass
 
         return nearestNeighborsList
-
-"""
-for x in range(120):
-    
-
-    data = []
-
-    for x in range(100):
-        tempList = []
-        for y in range(5):
-            tempList.append(random.randint(1, 500))
-        data.append(tempList)
-
-    treeVisualizationList = []
-    sampleTree = rTree(data)
-    nearestNeighbors = sampleTree.findNearestNeighbors([400,105,105,435,125])
-
-print(nearestNeighbors)
-"""
